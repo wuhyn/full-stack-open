@@ -3,9 +3,42 @@ import { useState } from 'react'
 // Define components
 const Heading = ({text}) => <h1>{text}</h1>
 
+const Buttons = (props) => {
+  return (
+    <>
+      <Button name="good" handleClick={props.addGood}/>
+      <Button name="neutral" handleClick={props.addNeutral}/>
+      <Button name="bad" handleClick={props.addBad}/>
+    </>
+  )
+}
+
 const Button = ({name, handleClick}) => <button onClick={handleClick}>{name}</button>
 
-const Statistics = ({name, count}) => name === 'positive' ? <p>{name} {count} %</p> : <p>{name} {count} </p>
+const StatisticLine = ({text, value}) => {
+  return (
+    text === 'positive' ?
+    <p>{text} {value} %</p> :
+    <p>{text} {value}</p>
+  )
+}
+
+const Statistics = ({stats}) => {
+  return (
+    <>
+      {stats[0] !== 0 || stats[1] !== 0 || stats[2] !== 0 ?
+      <>
+        <StatisticLine text="good" value ={stats[0]} />
+        <StatisticLine text="neutral" value ={stats[1]} />
+        <StatisticLine text="bad" value={stats[2]} />
+        <StatisticLine text="all" value={stats[3]}/>
+        <StatisticLine text="average" value={stats[4]}/>
+        <StatisticLine text="positive" value={stats[5]}/>
+      </>
+      : <p>No feedback given</p>}
+    </>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -14,16 +47,16 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   // State setter function to update state variables
-  const addGoodValue = count => {
-    setGood(good + count)
+  const addGoodValue = () => {
+    setGood(good + 1)
   }
 
-  const addNeutralValue = count => {
-    setNeutral(neutral + count)
+  const addNeutralValue = () => {
+    setNeutral(neutral + 1)
   }
 
-  const addBadValue = count => {
-    setBad(bad + count)
+  const addBadValue = () => {
+    setBad(bad + 1)
   }
 
   // Calculation of state variables
@@ -31,25 +64,14 @@ const App = () => {
   let average = (good + (bad * -1))/count
   let positive = good/count
 
+  const statArray = [good, neutral, bad, count, average, positive]
+
   return (
     <div>
       <Heading text="Give feedback"/>
-      <Button name="good" handleClick={() => addGoodValue(1)}/>
-      <Button name="neutral" handleClick={() => addNeutralValue(1)}/>
-      <Button name="bad" handleClick={() => addBadValue(1)}/>
+      <Buttons addGood={addGoodValue} addNeutral={addNeutralValue} addBad={addBadValue}/>
       <Heading text="Statistics"/>
-      { good !== 0 || neutral !== 0 || bad !== 0 ?
-        <>
-          <Statistics name="good" count={good}/>
-          <Statistics name="neutral" count={neutral}/>
-          <Statistics name="bad" count={bad}/>
-          <Statistics name="all" count={count}/>
-          <Statistics name="average" count={average}/>
-          <Statistics name="positive" count={positive}/>
-        </>
-        : <p>No feedback given</p>
-      }
-      
+      <Statistics stats={statArray}/>
     </div>
   )
 }
