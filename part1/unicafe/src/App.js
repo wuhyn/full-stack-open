@@ -5,7 +5,7 @@ const Heading = ({text}) => <h1>{text}</h1>
 
 const Button = ({name, handleClick}) => <button onClick={handleClick}>{name}</button>
 
-const Statistics = ({name, count}) => name == 'positive' ? <p>{name} {count} %</p> : <p>{name} {count} </p>
+const Statistics = ({name, count}) => name === 'positive' ? <p>{name} {count} %</p> : <p>{name} {count} </p>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -38,12 +38,18 @@ const App = () => {
       <Button name="neutral" handleClick={() => addNeutralValue(1)}/>
       <Button name="bad" handleClick={() => addBadValue(1)}/>
       <Heading text="Statistics"/>
-      <Statistics name="good" count={good}/>
-      <Statistics name="neutral" count={neutral}/>
-      <Statistics name="bad" count={bad}/>
-      <Statistics name="all" count={count}/>
-      <Statistics name="average" count={average}/>
-      <Statistics name="positive" count={positive}/>
+      { good !== 0 || neutral !== 0 || bad !== 0 ?
+        <>
+          <Statistics name="good" count={good}/>
+          <Statistics name="neutral" count={neutral}/>
+          <Statistics name="bad" count={bad}/>
+          <Statistics name="all" count={count}/>
+          <Statistics name="average" count={average}/>
+          <Statistics name="positive" count={positive}/>
+        </>
+        : <p>No feedback given</p>
+      }
+      
     </div>
   )
 }
