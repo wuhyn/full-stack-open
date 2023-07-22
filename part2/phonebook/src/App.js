@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import Persons from './components/Persons'
+import Form from './components/Form'
 
 const App = () => {
   // Define defauly persons object
@@ -61,27 +64,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-       filter shown with <input value={search} onChange={handleSearch}/>
+      {/* Search function for phonebook */}
+      <Filter search={search} handleSearch={handleSearch}/>
+      {/* Add new phonebook entries */}
       <h2>Add new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form addName={addName} handleNameChange={handleNameChange} newName={newName} 
+            handleNumberChange={handleNumberChange} newNumber={newNumber}/>
+      {/* Display phonebook information */}
       <h2>Numbers</h2>
-      {phonebook.map(person => {
-        return (
-            <>
-                <p>{person.name} {person.number}</p>
-            </>
-            )
-      })}
+      <Persons phonebook={phonebook}/>
     </div>
   )
 }
