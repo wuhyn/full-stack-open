@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Summary of the project
+
+Adding db.json
+1. npm install axios
+2. Run axios to fetch data from server
+
 ## Available Scripts
 
 In the project directory, you can run:

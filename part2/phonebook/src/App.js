@@ -1,20 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import Form from './components/Form'
 
 const App = () => {
-  // Define defauly persons object
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '04-1234567' 
-    }
-  ]) 
-
   // Define state variables
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  // Read and set data from server
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
+
+  console.log(persons)
 
   // Display all persons, or filter if the search function is used
   const phonebook = search.length > 0 ? 
