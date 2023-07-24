@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
-import Persons from './components/Persons'
+import Person from './components/Person'
 import Form from './components/Form'
+import personService from './services/persons'
 
 const App = () => {
   // Define state variables
@@ -13,22 +13,24 @@ const App = () => {
 
   // Read and set data from server
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
-  console.log(persons)
-
   // Display all persons, or filter if the search function is used
-  const phonebook = search.length > 0 ? 
+  const personsFiltered = search.length > 0 ? 
                     persons.filter(person => (
                         person.name.toLowerCase().includes(search.toLowerCase()) === true)
                         ) : persons
 
-  // Add name function
+  console.log("persons filtered is ", typeof(personsFiltered));
+
+  console.log(personsFiltered);
+
+  // Add function
   // Checks if name exists in the phonebook, add it if it does not
   const addName = (event) => {
     // Prevent form from submitting
@@ -41,8 +43,12 @@ const App = () => {
             name: newName,
             number: newNumber,
         }
-    
-        setPersons(persons.concat(nameObject))
+        personService
+          .add(nameObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+          })
+
     } else {
         alert(`${newName} is already added to the phonebook`)
     }
@@ -50,6 +56,14 @@ const App = () => {
     // Reset input boxes
     setNewName('')
     setNewNumber('')
+  }
+
+  // Delete function
+  const handleDelete = (event) => {
+    const nameToDeleteId = event.target.value
+
+    personService
+      .deleteRecord(nameToDeleteId)
   }
 
   // Handle name change function to set state onew newName based on user input
@@ -78,7 +92,7 @@ const App = () => {
             handleNumberChange={handleNumberChange} newNumber={newNumber}/>
       {/* Display phonebook information */}
       <h2>Numbers</h2>
-      <Persons phonebook={phonebook}/>
+      <Person persons={personsFiltered} handleDelete={handleDelete}/>
     </div>
   )
 }
