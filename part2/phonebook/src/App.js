@@ -26,10 +26,6 @@ const App = () => {
                         person.name.toLowerCase().includes(search.toLowerCase()) === true)
                         ) : persons
 
-  // console.log("persons filtered is ", typeof(personsFiltered));
-
-  // console.log(personsFiltered);
-
   // Add function
   // Checks if name exists in the phonebook, add it if it does not
   const addName = (event) => {
@@ -37,27 +33,26 @@ const App = () => {
     event.preventDefault()
 
     let personExist = persons.find(element => element.name === newName)
+    let text = `${newName} is already added to the phonebook`
+    let id = personExist.id
 
     const nameObject = {
       name: newName,
       number: newNumber,
-  }
-
+    }
+    // Add a new person in phonebook
     if(personExist === undefined) {
         personService
           .add(nameObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
           })
-
+    // Update a person in phonebook
     } else {
-        // alert(`${newName} is already added to the phonebook`)
-        let text = `${newName} is already added to the phonebook`
-
         if(window.confirm(text) === true) {
           text = "OK"
           personService
-            .updateRecord(nameObject)
+            .updateRecord(id, nameObject)
             .then(returnedPerson => {
               setPersons(persons.concat(returnedPerson))
             })

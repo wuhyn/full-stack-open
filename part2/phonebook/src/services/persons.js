@@ -16,8 +16,8 @@ const deleteRecord = id => {
     return request.then(response => response.data)
 }
 
-const updateRecord = id => {
-    const request = axios.put(`${baseUrl}/${id}`)
+const updateRecord = (id, newObject) => {
+    const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request.then(response => response.data)
 }
 
