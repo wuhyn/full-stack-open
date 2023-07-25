@@ -26,9 +26,9 @@ const App = () => {
                         person.name.toLowerCase().includes(search.toLowerCase()) === true)
                         ) : persons
 
-  console.log("persons filtered is ", typeof(personsFiltered));
+  // console.log("persons filtered is ", typeof(personsFiltered));
 
-  console.log(personsFiltered);
+  // console.log(personsFiltered);
 
   // Add function
   // Checks if name exists in the phonebook, add it if it does not
@@ -38,11 +38,12 @@ const App = () => {
 
     let personExist = persons.find(element => element.name === newName)
 
+    const nameObject = {
+      name: newName,
+      number: newNumber,
+  }
+
     if(personExist === undefined) {
-        const nameObject = {
-            name: newName,
-            number: newNumber,
-        }
         personService
           .add(nameObject)
           .then(returnedPerson => {
@@ -50,7 +51,19 @@ const App = () => {
           })
 
     } else {
-        alert(`${newName} is already added to the phonebook`)
+        // alert(`${newName} is already added to the phonebook`)
+        let text = `${newName} is already added to the phonebook`
+
+        if(window.confirm(text) === true) {
+          text = "OK"
+          personService
+            .updateRecord(nameObject)
+            .then(returnedPerson => {
+              setPersons(persons.concat(returnedPerson))
+            })
+        } else {
+          text = "No"
+        }
     }
 
     // Reset input boxes
@@ -60,10 +73,14 @@ const App = () => {
 
   // Delete function
   const handleDelete = (event) => {
-    const nameToDeleteId = event.target.value
+    const nameToDeleteId = Number(event.target.value)
+    const personsDeleted = persons.filter(person => person.id !== nameToDeleteId)
 
     personService
       .deleteRecord(nameToDeleteId)
+
+    setPersons(personsDeleted)
+
   }
 
   // Handle name change function to set state onew newName based on user input
