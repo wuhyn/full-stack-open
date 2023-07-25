@@ -21,4 +21,11 @@ const updateRecord = (id, newObject) => {
     return request.then(response => response.data)
 }
 
-export default {getAll, add, deleteRecord, updateRecord}
+const operation = {
+    getAll, 
+    add, 
+    deleteRecord, 
+    updateRecord
+}
+
+export default operation

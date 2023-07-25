@@ -33,8 +33,6 @@ const App = () => {
     event.preventDefault()
 
     let personExist = persons.find(element => element.name === newName)
-    let text = `${newName} is already added to the phonebook`
-    let id = personExist.id
 
     const nameObject = {
       name: newName,
@@ -49,16 +47,19 @@ const App = () => {
           })
     // Update a person in phonebook
     } else {
-        if(window.confirm(text) === true) {
-          text = "OK"
-          personService
-            .updateRecord(id, nameObject)
-            .then(returnedPerson => {
-              setPersons(persons.concat(returnedPerson))
-            })
-        } else {
-          text = "No"
-        }
+      let text = `${newName} is already added to the phonebook`
+      let id = personExist.id
+
+      if(window.confirm(text) === true) {
+        text = "OK"
+        personService
+          .updateRecord(id, nameObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+          })
+      } else {
+        text = "No"
+      }
     }
 
     // Reset input boxes
