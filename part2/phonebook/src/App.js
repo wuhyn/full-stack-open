@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import Person from './components/Person'
 import Form from './components/Form'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   // Define state variables
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
   // Read and set data from server
   useEffect(() => {
@@ -43,6 +46,9 @@ const App = () => {
         personService
           .add(nameObject)
           .then(returnedPerson => {
+            let text = `Added ${newName}`
+            setMessage(text)
+            setMessageType("info")
             setPersons(persons.concat(returnedPerson))
           })
     // Update a person in phonebook
@@ -70,12 +76,21 @@ const App = () => {
   // Delete function
   const handleDelete = (event) => {
     const nameToDeleteId = Number(event.target.value)
-    const personsDeleted = persons.filter(person => person.id !== nameToDeleteId)
+    const personsCollection = persons.filter(person => person.id !== nameToDeleteId)
+    const personsDeleted = persons.filter(person => person.id === nameToDeleteId)
 
     personService
       .deleteRecord(nameToDeleteId)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        const message = "Information of " + personsDeleted[0].name + " has already been removed from the server";
+        setMessage(message)
+        setMessageType("error")
+      })
 
-    setPersons(personsDeleted)
+    setPersons(personsCollection)
 
   }
 
@@ -97,6 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} messageType={messageType}/>
       {/* Search function for phonebook */}
       <Filter search={search} handleSearch={handleSearch}/>
       {/* Add new phonebook entries */}
