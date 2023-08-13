@@ -5,11 +5,13 @@ import services from "services/countries";
 const Country = ({countryList}) => {
     const [countryName, setCountryName] = useState('');
     const [countryData, setCountryData] = useState();
+    const [showDetail, setShowDetail] = useState(false);
 
     // Load a country's details if there's only one country provided from the search function
     useEffect(() => {
         if(countryList.length === 1){
             setCountryName(countryList[0].name.common);
+            setShowDetail(true);
         }
     },[countryList])
 
@@ -24,15 +26,38 @@ const Country = ({countryList}) => {
         }
     },[countryName])
 
-    if(countryList.length > 10){
-        return <p>Too many matches, specify another filter</p>;
-    } else if(countryList.length > 1 && countryList.length <= 10){
-        return(countryList.map((country) => <p>{country.name.common}</p>)
-        )
-    } 
-    else if(countryList.length === 1){
-        if(countryData !== undefined){
-            return (
+    // Onclick - Sets the country name and displays the country details
+    const showCountryDetail = (countryName) => {
+        setCountryName(countryName);
+        setShowDetail(true);
+
+    }
+
+    return (
+        <>
+            {/* Search result warning */}
+            {
+            countryList.length > 10 && showDetail === false ? 
+            <p>Too many matches, specify another filter</p> : 
+            null
+            }
+
+            {/* Display a list of countries */}
+            {
+            (countryList.length > 1 && countryList.length <= 10) && showDetail === false ? 
+            countryList.map((country) => (
+                <div className="country-list">
+                    <p>{country.name.common}</p>
+                    <button onClick={() => showCountryDetail(country.name.common)}>show</button>
+                </div>
+            )) : 
+            null
+            }
+
+            {/* Display detailed information for a country */}
+            {
+                showDetail && countryData !== undefined ?
+                // countryList.length === 1 && countryData !== undefined ? 
                 <>
                     <h2>{countryData.name.common}</h2>
                     <div>
@@ -55,14 +80,12 @@ const Country = ({countryList}) => {
                             <img src={countryData.flags.png} alt={countryData.flags.alt} />
                         }
                     </div>
-                </>
-            )
-        }
+                </> : 
+                null
+            }
+        </>
+    )
 
-        console.log(countryData);
-        
-       
-    }
 }
 
 export default Country

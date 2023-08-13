@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+/* Country component CSS */
+.country-list {
+  display: flex;
+  margin-top: 1em;
+}
+
+.country-list p {
+  margin-right: 1em;
+  width: 100px;
+}
+
+.country-list button {
+  width: 100px;
+}
+
