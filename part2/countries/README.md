@@ -13,12 +13,18 @@ The Country App will show a country's details including the capital city, the co
 
 External API utilised:
 
-- Geocoding API: https://openweathermap.org/api/geocoding-api
-- Current weather API: https://openweathermap.org/current
-- Custom weather icon: https://openweathermap.org/weather-conditions#Icon-list
+- University of Helsinki REST Countries API
+  - https://studies.cs.helsinki.fi/restcountries/api/all
+  - https://studies.cs.helsinki.fi/restcountries/api/name/{name}
+- OpenWeatherMap API
+  - Geocoding API: https://openweathermap.org/api/geocoding-api
+  - Current weather API: https://openweathermap.org/current
+  - Custom weather icon: https://openweathermap.org/weather-conditions#Icon-list
 
 ## Pre-requisite
-This project utilizes a .env environmental variable file to function correctly, a custom API key for the APIs utilised above can be generated from [OpenWeatherMap.](https://home.openweathermap.org/api_keys)
+This project utilizes a .env environmental variable file to function correctly, a custom API key for the OpenWeatherMap API utilised above can be generated from [OpenWeatherMap.](https://home.openweathermap.org/api_keys)
+
+Note: University of Helsinki's API does not require a custom API key.
 
 ## Available Scripts
 
