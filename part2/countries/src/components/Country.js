@@ -7,12 +7,8 @@ const Country = ({countryList}) => {
     const [countryName, setCountryName] = useState('');
     const [countryData, setCountryData] = useState();
     const [showDetail, setShowDetail] = useState(false);
-
     const [geocoding, setGeocoding] = useState();
     const [weatherData, setWeatherData] = useState();
-
-    // console.log("Country data is ", countryData);
-
 
     // Load a country's details if there's only one country provided from the search function
     useEffect(() => {
@@ -33,13 +29,9 @@ const Country = ({countryList}) => {
         }
     },[countryName])
 
-    // console.log(countryData);
-
     // Get geocoding for a country's capital
     useEffect(() => {
-        
         if(countryData !== undefined){
-            // console.log("Hello, useeffect running");
             weatherServices
             .getCoordinates(countryData.capital, 1)
             .then(geocoding => {
@@ -47,8 +39,6 @@ const Country = ({countryList}) => {
             })
         }
     }, [countryData])
-
-    // console.log(geocoding[0].lat);
 
     // Get current weather 
     useEffect(() => {
@@ -60,9 +50,6 @@ const Country = ({countryList}) => {
             })
         }
     }, [geocoding])
-
-    // console.log(geocoding);
-    console.log(weatherData);
 
     // Onclick - Sets the country name and displays the country details
     const showCountryDetail = (countryName) => {
@@ -94,13 +81,12 @@ const Country = ({countryList}) => {
             {/* Display detailed information for a country */}
             {
                 showDetail && countryData !== undefined ?
-                // countryList.length === 1 && countryData !== undefined ? 
                 <>
                     {/* Basic country details */}
                     <h2>{countryData.name.common}</h2>
                     <div>
-                        <p>{countryData.capital}</p>
-                        <p>{countryData.area}</p>
+                        <p>capital {countryData.capital}</p>
+                        <p>area {countryData.area}</p>
                     </div>
                     <div>
                         <p><strong>languages:</strong></p>
@@ -119,11 +105,13 @@ const Country = ({countryList}) => {
                         }
                     </div>
 
-                    {/* Weather data */}
+                    {/* Display weather details*/}
                     <div>
                         <h3><strong>Weather in: {countryData.capital}</strong></h3>
-                        <p>temperature: {weatherData.main.temp}</p>
-                        <p>wind: {weatherData.wind.speed}</p>
+                        <p>{geocoding !== undefined ? geocoding[0].name : 'loading'}</p>
+                        <p>temperature {weatherData !== undefined ? `${weatherData.main.temp} Celsius` : 'loading'}</p>
+                        <img src={weatherData !== undefined ? `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png` : 'loading'} alt="" />
+                        <p>wind: {weatherData !== undefined ? `${weatherData.wind.speed} m/s` : 'loading'}</p>
                     </div>
                 </> : 
                 null
